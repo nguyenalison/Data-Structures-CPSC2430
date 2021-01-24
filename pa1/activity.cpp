@@ -1,0 +1,195 @@
+// Ali Nguyen
+// activities.cpp
+// 90-21-20
+
+#include "activity.h"
+#include <iostream>
+
+using namespace std;
+
+ActivityList::ActivityList() {
+    front = nullptr;
+
+}
+
+ActivityList:: ActivityList( const ActivityList& object) {
+    ActivityNode *ptr;
+    ActivityNode *curr;
+    ActivityNode *newCurr;
+    if (object.front == nullptr)
+        front = nullptr;
+    else {
+        curr = object.front;
+        front = new ActivityNode;
+        newCurr = front;
+        front->name = curr -> name;
+        front->price = curr -> price;
+        front->rating = curr -> rating;
+        front->priority = curr -> priority;
+
+        while(curr->next!= nullptr){
+            curr = curr->next;
+            ptr = new ActivityNode;
+            newCurr->next = ptr;
+            newCurr= newCurr->next;
+            newCurr->name = curr -> name;
+            newCurr->price = curr -> price;
+            newCurr->rating = curr -> rating;
+            newCurr->priority = curr -> priority;
+        }
+        newCurr -> next = nullptr;
+    }
+}
+
+
+ActivityList ActivityList :: operator=(const ActivityList& object){
+    ActivityNode *ptr;
+    ActivityNode *curr;
+    ActivityNode *newCurr;
+
+    destroy();
+    if (object.front == nullptr)
+        front = nullptr;
+    else {
+        curr = object.front;
+        front = new ActivityNode;
+        newCurr = front;
+        front->name = curr -> name;
+        front->price = curr -> price;
+        front->rating = curr -> rating;
+        front->priority = curr -> priority;
+
+        while(curr->next!= nullptr){
+            curr = curr->next;
+            ptr = new ActivityNode;
+            newCurr->next = ptr;
+            newCurr= newCurr->next;
+            newCurr->name = curr -> name;
+            newCurr->price = curr -> price;
+            newCurr->rating = curr -> rating;
+            newCurr->priority = curr -> priority;
+        }
+        newCurr -> next = nullptr;
+    }
+    return *this;
+}
+
+
+ActivityList:: ~ActivityList(){
+    destroy();
+}
+
+
+void ActivityList:: enqueue(string n, float p, float r, int pri){
+    ActivityNode* newNode = nullptr;
+    ActivityNode* ptr = nullptr;
+
+    newNode = new ActivityNode;
+    newNode->name = n;
+    newNode->price = p;
+    newNode->rating = r;
+    newNode->priority = pri;
+    newNode -> next = nullptr;
+
+    if(front == nullptr || newNode->priority < front-> priority){
+        newNode->next = front;
+        front = newNode;
+    }else{
+        ptr = front;
+        while(ptr->next!= nullptr && ptr->next->priority<=newNode->priority){
+            ptr = ptr->next;
+        }
+        newNode->next = ptr->next;
+        ptr->next = newNode;
+    }
+}
+
+
+string ActivityList:: dequeue(string n){
+    ActivityNode* ptr = front;
+    ActivityNode* prev;
+    if(front->name == n) {
+        front = ptr->next;
+        delete ptr;
+    }else{
+        while (ptr != nullptr && ptr->name != n) {
+            prev = ptr;
+            ptr = ptr->next;
+        }
+        if (ptr->name == n) {
+            prev->next = ptr->next;
+            cout << "Deleting " << n << endl;
+            delete ptr;
+        }
+    }
+    return n;
+}
+
+int  ActivityList:: getSize(){
+    ActivityNode* ptr = front;
+    int count = 0;
+    while(ptr){
+        count++;
+        ptr = ptr->next;
+    }
+    return count;
+}
+
+void ActivityList :: printList(){
+    ActivityNode* ptr;
+    int count = 0 ;
+    ptr = front;
+    while(ptr){
+      cout << count+1 << ". [P" << ptr-> priority << "] "
+           << ptr->name << " - "
+           << "$" << ptr->price << " - " << ptr->rating << " stars \n" ;
+      ptr = ptr->next;
+      count++;
+    }
+}
+
+
+float ActivityList:: getRating(string name){
+    ActivityNode* ptr = front;
+    float rate = 0 ;
+    while(ptr){
+        if(ptr->name == name)
+            rate = ptr->rating;
+        ptr = ptr->next;
+    }
+    return rate;
+}
+
+void ActivityList:: createList(ActivityList& s2, int priority){
+
+    ActivityNode* ptr = front;
+
+    while (ptr != nullptr) {
+        if (ptr->priority == priority)
+            s2.enqueue(ptr->name, ptr->price, ptr->rating, ptr->priority);
+        ptr = ptr->next;
+    }
+}
+
+
+void ActivityList::destroy()
+{
+    ActivityNode* current = front;
+    ActivityNode* nextNode;
+    while(current != 0){
+        nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+    
+    front = 0;
+}
+
+
+
+
+
+
+
+
+

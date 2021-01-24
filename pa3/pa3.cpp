@@ -1,0 +1,103 @@
+// Nguyen, Ali
+// pa3.cpp
+// 10-18-2020
+
+// DESCRIPTION: Given a list of board games, their maximum number of players
+//      and the time it takes to play, this program sorts them into a
+//      linked list binary search tree. When the user runs the program
+//      they will be given the height of the tree. They will be given
+//      the entire list of games to chose from, and will be asked to pick a
+//      game they want to get the time and players of. The user has the option
+//      to remove a game from the list, and print out a list of games that
+//      they are able to play given a max number of minutes they have to play
+
+// ASSUMPTION: NONE
+
+
+#include <iostream>
+#include "gamebst.h"
+#include <fstream>
+#include <sstream>
+
+using namespace std;
+
+const string FILENAME = "boardgames.csv";   // file name to read in
+
+int main() {
+    GameBST tree;                      // Tree object created
+    GameBST tree3;                     // Copy assignment tree object
+    string line;                       // String to getLine from line of file
+    string name;                       // Extracting name from file
+    string maxPlayers;                 // Extracting maximum number of players
+    string playTime;                   // Extracting playtime from file
+    ifstream infile;                   // ifstream object to read in file
+    string userChoice;                 // User input to print single game
+    string deleteGame;                 // String of game that is removed
+    int exist;                         // Holds 1 or 0 if a game exists
+    int time;                          // Holds user input for playTime
+
+    infile.open(FILENAME);
+
+    if (infile.fail()) {
+        cout << "There is a problem in the file... Press enter...";
+        cin.get();
+    }else{
+      getline(infile, line);
+      while(getline(infile, line)){
+            istringstream s1(line);
+            getline(s1, name, ',');
+            getline(s1, maxPlayers, ',');
+            getline(s1, playTime, ',');
+            tree.insert(name, stoi(maxPlayers), stoi(playTime));
+        }
+    }
+
+    cout << "\nHello! Processing the " << FILENAME << " file\n"
+    << "Tree height is " << tree.getHeight();
+
+    cout << "\n\nPrinting tree:\n";
+    tree.print();
+
+    cout << "\nWhat game do you want to print? ";
+    getline(cin, userChoice);
+    tree.printGame(userChoice);
+
+    cout << "\nWhat game do you want to remove? ";
+    getline(cin,deleteGame);
+    exist = tree.remove(deleteGame);
+    if(exist == 1) {
+        cout << deleteGame << " has been removed. Printing updated tree:\n";
+        tree.print();
+    }else
+        cout << "This game does not exist...\n";
+
+
+    cout << "\nHow much time do you have (in mins)? ";
+    cin >> time;
+    while(time < 0){
+      cout << "Time cannot be negative. Enter another time: ";
+      cin >> time;
+    }
+    cout << "Games you can play in " << time <<  " min are: \n";
+    tree.printPlayable(time);
+
+
+    cout << "\n\nPRESS ENTER TO TEST CLASS FUNCTIONS...";
+    cin.ignore();
+    cin.get();
+    
+    GameBST tree2(tree);               // Copy Constructor of tree object       
+    tree2.insert("Apples to Apples", 3, 20);
+    cout << "\n\nInserting Apples to Apples into COPY CONSTRUCTED Tree\n"
+         <<"Printing Copy Constructed Tree: \n";
+    tree2.print();
+
+    tree3 = tree;
+    tree3.remove("Love Letter");
+    cout << "\n\nLove Letter has been removed. Printing "
+         << "COPY ASSIGNMENT tree:\n";
+    tree3.print();
+    
+    cout << endl << endl << endl;
+
+}

@@ -1,0 +1,53 @@
+// Nguyen,Alison
+// pa5.cpp
+// 11-14-2020
+
+#include <string>
+#include "book.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+Book::Book(){
+
+    this->title = "";
+    this->author = "";
+    this->rating = 0.0;
+    this->ISBN = 0;
+    this->pages = 0;
+}
+
+Book::Book(string t, string a, float r, long i, int p){
+
+    this->title = t;
+    this->author = a;
+    this->rating = r;
+    this->ISBN = i;
+    this->pages = p;
+
+}
+
+void Book:: printBook(){
+  for(int i = 0; i < int(author.size()); i++){
+        if(author[i] == '-')
+            author[i] = ',';
+    }
+    cout << "\nTitle: " << title
+         << "\nAuthor: " << author
+         << "\nRating: " << rating
+         << "\nISBN: " << ISBN
+         << "\nPages: " << pages << endl << endl;
+}
+
+
+string Book::getTitle() {
+    return title;
+}
+
+long Book::getKey() {
+    return ISBN;
+}
+
+string Book:: getAuthor(){
+    return author;
+}

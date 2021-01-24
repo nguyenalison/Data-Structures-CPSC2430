@@ -1,0 +1,30 @@
+// Nguyen, Ali
+// 10/06/2020
+// recursiveQueue.h
+
+#ifndef RECURSIVEQUEUE_H
+#define RECURSIVEQUEUE_H
+class RecursiveQueue{
+private:
+    struct Node{
+        int val;
+        Node* next;
+    };
+    Node* front;
+    Node* back;
+    int numItems;
+public:
+    RecursiveQueue();
+    RecursiveQueue(const RecursiveQueue & newObject);
+    RecursiveQueue operator=(const RecursiveQueue & newObject);
+    ~RecursiveQueue();
+    void destroy();
+    void enqueue(int value);
+    int dequeue();
+    bool isEmpty() const;
+    void recInsert(int val);
+    void doubleEven();
+    int sumBigger(int x);
+    void print();
+};
+#endif 

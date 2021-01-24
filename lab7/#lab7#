@@ -1,0 +1,39 @@
+// Nguyen, ALison                                                               
+// lab6.cpp                                                                     
+// 10-30-2020                                                                   
+
+#include <iostream>
+using namespace std;
+
+
+class Book{
+private:
+  string title;
+  long ISBN;
+
+public:
+  Book();
+  Book(string t, long num);
+  int hashFun(long key);
+  bool addBook(Book arr[],string t,long key);
+  void print(Book arr[]);
+};
+
+const int ARRSIZE = 13;
+
+int main()
+{
+  Book bookshelf [20];
+  Book hash;
+  int numBooks = 20, collision = 0;
+  bool canAdd;
+
+  string titleArr [] = {"Sherlock Holmes: The Complete Novels and Stories",
+   "The Very Hungry Caterpillar","Goodnight Moon","On the Night You Were Born",
+  "The Kissing Hand","The Monster at the End of this Book",
+  "The Story of Ruby Bridges","The Road Not Taken and Other Poems",
+  "The Cat in the Hat and Other Dr. Seuss Favorites","Green Eggs and Ham",
+  "One Morning in Maine","The Glass Castle","A Child's Garden of Verses",
+  "Twenty Love Poems and a Song of Despair","The Lorax",
+  "Letters to a Young Poet","The Body","The Missing Piece Meets the Big O",
+  "Matilda","Harry Potter and the Sorcerer's Stone"};

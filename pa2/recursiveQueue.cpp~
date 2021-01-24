@@ -1,0 +1,172 @@
+// Nguyen, Ali
+// 10/06/2020
+// recursiveQueue.h
+
+#include "recursiveQueue.h"
+#include <iostream>
+
+using namespace std;
+
+RecursiveQueue:: RecursiveQueue(){
+    maxSize = 3;                         //Initial array set to size 3
+    qArray = new int[maxSize];
+    front = -1;                          // Front is empty until value inserted
+    back = -1;                           // Back is empty until value inserted
+    numItems = 0;                        // Num items in array
+}
+
+RecursiveQueue:: RecursiveQueue(const RecursiveQueue & newObject){
+    qArray = new int[newObject.maxSize];
+    front = newObject.front;
+    back = newObject.back;
+    numItems = newObject.numItems;
+
+    for(int i = 0; i < newObject.maxSize; i++)
+        qArray[i] = newObject.qArray[i];
+}
+
+RecursiveQueue RecursiveQueue:: operator=(const RecursiveQueue & newObject){
+
+    delete [] qArray;
+
+    qArray = new int[newObject. maxSize];
+    front = newObject.front;
+    back = newObject.back;
+    numItems = newObject.numItems;
+
+    for(int i = 0; i < newObject. maxSize; i++)
+        qArray[i] = newObject.qArray[i];
+
+    return *this;
+}
+
+RecursiveQueue:: ~RecursiveQueue(){
+    delete [] qArray;
+}
+
+void RecursiveQueue:: enqueue(int value){
+
+    if(isFull()){
+        cout << "The queue is FULL\n" ;
+        resize(qArray, maxSize);
+    }else if(front == -1)
+        front = 0;
+    back = (back+1) % maxSize;
+    qArray[back] = value;
+    numItems++;
+}
+
+int RecursiveQueue:: dequeue() {
+    int num;
+    if(isEmpty()){
+        cout << "\nThe queue is EMPTY\n";
+    }else{
+        num = qArray[front];
+        front++; //= (front+1)%maxSize;
+        numItems--;
+    }
+    cout << "\nDequeued value is " << num;
+    return num;
+}
+
+bool RecursiveQueue:: isEmpty() const{
+    bool stat;
+    if(numItems > 0)
+        stat = false;
+    else
+        stat = true;
+    return stat;
+}
+
+bool RecursiveQueue:: isFull() const {
+    bool stat;
+    if (numItems < maxSize)
+        stat = false;
+    else
+        stat = true;
+    return stat;
+}
+
+void RecursiveQueue:: resize(int* &arr, int& size){
+    size *= 2;
+    int* newArr = new int[size];       // create a new array object to copy
+    for(int i = 0; i < size; i++)      //     over values
+        newArr[i] = arr[i];
+    delete [] arr;
+
+    arr = new int[size];
+    for(int i = 0 ; i < size; i++)     // copying new array into original
+        arr[i] = newArr[i];            //      but now with size updated
+    delete [] newArr;
+
+    cout << "Doubling the array size to : " << size ;
+}
+
+void RecursiveQueue:: print(int num){
+    int comma = num - 1;               // Number of commas needed to print
+
+    if (isEmpty())
+         cout << "Queue is EMPTY";
+    else {
+         if(num == front-1) {
+             return;
+         }
+         print(num-1);
+         if (comma != front-1){
+            cout << ", ";
+        }
+         cout << qArray[num];
+     }
+}
+
+void RecursiveQueue:: print() {
+    print(back);
+}
+
+void RecursiveQueue::doubleEven(){
+    doubleEven(numItems);
+}
+
+void RecursiveQueue:: doubleEven(int n){
+    if (n == -1)
+        return;
+    else {
+        if (n % 2 == 0)
+            qArray[n-1] *= 2;
+        doubleEven(--n);
+    }
+}
+
+void RecursiveQueue:: recInsert(int val) {
+    if(isFull()){                       // If the array is full resize *2
+        resize(qArray,maxSize);
+    }
+    if (val >= 0) {
+        if (val == 0)
+            return;
+        else {
+            recInsert(val / 10);
+            enqueue(val % 10);
+        }
+    } else {
+        cout << "Must enter a POSITIVE value! \n";
+    }
+}
+
+int RecursiveQueue:: sumBigger(int x, int index) {
+    if(index == back){                  // Once index tracker is equal to back
+        if(qArray[index] <= x)          // Check if the value is greater than x
+            return 0;
+        else
+            return qArray[index];
+    }else{
+        if(qArray[index] <= x)          // Check if the value is greater than x
+            return 0 + sumBigger(x, ++index);
+        else
+            return qArray[index] + sumBigger(x, ++index);
+    }
+}
+
+int RecursiveQueue:: sumBigger(int x){
+    return sumBigger(x,front);
+}
