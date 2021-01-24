@@ -1,0 +1,10 @@
+# Ignore Folders
+
+
+# Ignore Files
+boardgames.csv
+heap.cpp
+heap.cpp~
+heap.h
+lab2
+pa4.cpp
